@@ -5,6 +5,7 @@ import com.br.csousa.organizationForAll.services.LocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +26,9 @@ public class LocalController {
         }
     }
 
+
     @GetMapping(value = "/all", produces = "application/json")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<?> getAllLocals() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(localService.getAllLocals());

@@ -23,16 +23,19 @@ public class ReserveService {
     private CostumerService costumerService;
 
     public Reserve createReserve(RequestReserveCreate request) {
+
+        reserveRepository.findByDateAndHour(request.getDate(), request.getHour()).ifPresent(reserve -> {
+            throw new RuntimeException("Reserve already exists");
+        });
+
         Reserve reserve = builderReserve(request);
         return reserveRepository.save(reserve);
     }
 
 
-
     public Reserve findById(Long idReserve) {
         return reserveRepository.findById(idReserve).orElseThrow(() -> new RuntimeException("Reserve not found"));
     }
-
 
     private Reserve builderReserve(RequestReserveCreate request) {
         return Reserve.builder()
@@ -48,11 +51,9 @@ public class ReserveService {
                 .build();
     }
 
-
     private List<Costumer> builderCostumers(List<Long> costumersId) {
         return costumersId.stream().map(costumerService::findById).toList();
     }
-
 
     public Reserve getReserveById(Long id) {
         return reserveRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserve not found"));
