@@ -5,6 +5,7 @@ import com.br.csousa.organizationForAll.services.CostumerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class CostumerController {
     @Autowired
     private CostumerService costumerService;
 
+    @Secured({"ADMIN"})
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createCostumer(@RequestBody(required = true) RequestCostumerCreate request) {
         try {
@@ -24,6 +26,7 @@ public class CostumerController {
         }
     }
 
+    @Secured({"ADMIN"})
     @GetMapping(value = "/all", produces = "application/json")
     public ResponseEntity<?> getAllCostumers() {
         try {
@@ -33,6 +36,7 @@ public class CostumerController {
         }
     }
 
+    @Secured({"ADMIN","USER"})
     @GetMapping(value = "/{idCostumer}", produces = "application/json")
     public ResponseEntity<?> getCostumerById(@PathVariable Long idCostumer) {
         try {

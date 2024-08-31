@@ -18,6 +18,7 @@ public class LocalController {
 
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
+    @Secured("ADMIN")
     public ResponseEntity<?> createLocal(@RequestBody(required = true)  RequestLocalCreate request) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(localService.createLocal(request));
@@ -28,7 +29,7 @@ public class LocalController {
 
 
     @GetMapping(value = "/all", produces = "application/json")
-    @Secured("ROLE_ADMIN")
+    @Secured("ADMIN")
     public ResponseEntity<?> getAllLocals() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(localService.getAllLocals());
@@ -37,6 +38,7 @@ public class LocalController {
         }
     }
 
+    @Secured({"ADMIN","USER"})
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getLocalById(@PathVariable Long id) {
         try {

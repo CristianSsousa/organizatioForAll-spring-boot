@@ -5,6 +5,7 @@ import com.br.csousa.organizationForAll.services.ReserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class ReserveController {
     @Autowired
     private ReserveService reserveService;
 
+    @Secured({"ADMIN"})
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createReserve(@RequestBody(required = true) RequestReserveCreate request) {
         try {
@@ -24,6 +26,7 @@ public class ReserveController {
         }
     }
 
+    @Secured({"ADMIN"})
     @GetMapping(value = "/all", produces = "application/json")
     public ResponseEntity<?> getAllReserves() {
         try {
@@ -33,6 +36,7 @@ public class ReserveController {
         }
     }
 
+    @Secured({"ADMIN","USER"})
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getReserveById(@PathVariable Long id) {
         try {
@@ -42,6 +46,7 @@ public class ReserveController {
         }
     }
 
+    @Secured({"ADMIN","USER"})
     @PutMapping(value = "/update/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateReserve(@PathVariable Long id, @RequestBody(required = true) RequestReserveCreate request) {
         try {
