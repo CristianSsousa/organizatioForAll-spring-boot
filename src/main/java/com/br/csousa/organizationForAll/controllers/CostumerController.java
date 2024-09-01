@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v1/costumers")
-@CrossOrigin(origins = "*")
 public class CostumerController {
 
     @Autowired

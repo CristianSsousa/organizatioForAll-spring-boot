@@ -1,8 +1,10 @@
 package com.br.csousa.organizationForAll.services;
 
 import com.br.csousa.organizationForAll.models.Costumer;
+import com.br.csousa.organizationForAll.models.Local;
 import com.br.csousa.organizationForAll.models.Reserve;
 import com.br.csousa.organizationForAll.models.request.RequestReserveCreate;
+import com.br.csousa.organizationForAll.models.response.ResponseLocal;
 import com.br.csousa.organizationForAll.repositorys.ReserveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,13 @@ public class ReserveService {
 
     public Reserve createReserve(RequestReserveCreate request) {
 
-        reserveRepository.findByDateAndHour(request.getDate(), request.getHour()).ifPresent(reserve -> {
-            throw new RuntimeException("Reserve already exists");
+        reserveRepository.findByDateAndHourAndLocal(request.getDate(), request.getHour(), localService.findById(request.getLocalId())).ifPresent(reserve -> {
+            throw new RuntimeException("RESERVE ALREADY EXISTS");
         });
 
         Reserve reserve = builderReserve(request);
         return reserveRepository.save(reserve);
     }
-
 
     public Reserve findById(Long idReserve) {
         return reserveRepository.findById(idReserve).orElseThrow(() -> new RuntimeException("Reserve not found"));

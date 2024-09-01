@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v1/locals")
-@CrossOrigin(origins = "*")
 public class LocalController {
 
     @Autowired

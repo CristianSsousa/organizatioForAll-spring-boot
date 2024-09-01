@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +39,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        String jwtToken = parseJwt(request);
+
+        Cookie[] cookies = request.getCookies();
+        String jwtToken;
+        if(cookies != null){
+            jwtToken = parseJwt(cookies);
+        } else {
+            jwtToken = parseJwt(request);
+        }
+
         if (jwtToken != null && validateJwtToken(jwtToken)) {
             String username = getUsernameFromJwt(jwtToken);
 
@@ -53,6 +62,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
+    }
+
+    private String parseJwt(Cookie[] cookies) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("authToken")) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
     private String parseJwt(HttpServletRequest request) {
